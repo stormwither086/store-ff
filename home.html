@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STORE FF</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: linear-gradient(135deg,
+    #241044,
+    #393b91,
+    #5367c9,
+    #30205f
+  );
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+header {
+  background: rgba(255,255,255,0.13);
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 17px;
+  backdrop-filter: blur(10px);
+}
+
+header h1 {
+  margin: 0;
+  letter-spacing: 3px;
+}
+
+header p {
+  color: #e0ddff;
+}
+
+.welcome {
+  margin: 30px 0;
+}
+
+.welcome h2 {
+  font-size: 27px;
+}
+
+.section-title {
+  margin-top: 30px;
+  border-left: 5px solid #b8a8ff;
+  padding-left: 12px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.product {
+  background: #ffffff;
+  color: #29264b;
+  border-radius: 15px;
+  padding: 13px;
+  box-shadow: 0 8px 25px rgba(15,10,50,0.2);
+  transition: 0.3s;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+}
+
+.product img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #ddd;
+}
+
+.product h3 {
+  color: #51449c;
+}
+
+.product p {
+  color: #626078;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #5543a9 !important;
+}
+
+button {
+  border: none;
+  border-radius: 9px;
+  padding: 11px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.buy {
+  background: #6354b9;
+  color: white;
+  width: 100%;
+}
+
+.buy:hover {
+  background: #44368f;
+}
+
+.delete {
+  background: #f0eafa;
+  color: #654e9c;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.form-box {
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 35px;
+}
+
+.form-box h2 {
+  margin-top: 0;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 15px;
+  border: 1px solid #c7baff;
+  border-radius: 9px;
+  background: #f8f7ff;
+  color: #29264b;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 75px;
+}
+
+.add {
+  background: #c1b3ff;
+  color: #30205f;
+  width: 100%;
+  font-size: 15px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 45px;
+  color: #e0ddff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <h1>STORE FF</h1>
+  <p>Tempat menemukan akun Free Fire impianmu.</p>
+</header>
+
+<div class="welcome">
+  <h2>Selamat Datang 👋</h2>
+  <p>Temukan berbagai pilihan akun Free Fire di Store FF.</p>
+</div>
+
+<h2 class="section-title">🔥 Daftar Akun FF</h2>
+
+<div class="products" id="products"></div>
+
+<div class="form-box">
+
+  <h2>➕ Tambahkan Akun</h2>
+  <p>Isi informasi akun yang ingin lu tampilkan.</p>
+
+  <form id="productForm">
+
+    <label>Nama Akun</label>
+    <input id="name" placeholder="Contoh: Akun FF Sultan" required>
+
+    <label>Level Akun</label>
+    <input id="level" placeholder="Contoh: Level 65" required>
+
+    <label>Deskripsi</label>
+    <textarea id="description" placeholder="Deskripsi akun..." required></textarea>
+
+    <label>Harga (Rp)</label>
+    <input id="price" type="number" min="1" placeholder="Contoh: 150000" required>
+
+    <label>Link Gambar</label>
+    <input id="image" type="url" placeholder="https://contoh.com/gambar.jpg">
+
+    <button class="add" type="submit">
+      TAMBAHKAN PRODUK
+    </button>
+
+  </form>
+
+</div>
+
+<footer>
+  <p>© 2026 STORE FF</p>
+  <p>Terima kasih sudah mengunjungi toko kami.</p>
+</footer>
+
+</div>
+
+<script>
+
+let accounts = JSON.parse(
+  localStorage.getItem("accounts")
+) || [];
+
+const products = document.getElementById("products");
+
+function renderProducts() {
+
+  products.innerHTML = "";
+
+  if (accounts.length === 0) {
+    products.innerHTML =
+      "<p>Belum ada akun FF yang ditambahkan.</p>";
+    return;
+  }
+
+  accounts.forEach((account, index) => {
+
+    const card = document.createElement("div");
+    card.className = "product";
+
+    const img = document.createElement("img");
+    img.src = account.image ||
+      "https://placehold.co/600x350/e5e0ff/51449c?text=AKUN+FF";
+    img.alt = account.name;
+
+    img.onerror = function() {
+      this.src = "https://placehold.co/600x350/e5e0ff/51449c?text=AKUN+FF";
+    };
+
+    const title = document.createElement("h3");
+    title.textContent = account.name;
+
+    const level = document.createElement("p");
+    level.textContent = "Level: " + account.level;
+
+    const desc = document.createElement("p");
+    desc.textContent = account.description;
+
+    const price = document.createElement("p");
+    price.className = "price";
+    price.textContent = "Rp" +
+      Number(account.price).toLocaleString("id-ID");
+
+    const buy = document.createElement("button");
+    buy.className = "buy";
+    buy.textContent = "LIHAT AKUN";
+    buy.onclick = function() {
+      alert("Produk dipilih: " + account.name);
+    };
+
+    const del = document.createElement("button");
+    del.className = "delete";
+    del.textContent = "HAPUS";
+    del.onclick = function() {
+      if (confirm("Hapus produk ini?")) {
+        accounts.splice(index, 1);
+        saveProducts();
+      }
+    };
+
+    card.append(img, title, level, desc, price, buy, del);
+    products.appendChild(card);
+
+  });
+}
+
+function saveProducts() {
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+  renderProducts();
+}
+
+document.getElementById("productForm")
+.addEventListener("submit", function(e) {
+
+  e.preventDefault();
+
+  const account = {
+    name: document.getElementById("name").value,
+    level: document.getElementById("level").value,
+    description: document.getElementById("description").value,
+    price: document.getElementById("price").value,
+    image: document.getElementById("image").value
+  };
+
+  accounts.push(account);
+  saveProducts();
+
+  this.reset();
+
+  alert("Akun berhasil ditambahkan!");
+
+});
+
+renderProducts();
+
+</script>
+
+</body>
+  </html>
+  
